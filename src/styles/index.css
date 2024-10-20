@@ -1,12 +1,14 @@
+li:hover > *{
+    visibility: visible;
+}
 
-/* 
+.icono-oculto {
+    visibility: hidden;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: visibility 0.2s ease;
+}
 
-    You can write your own styles here...
-    
-    
-    ...Or you can use the import command to include 
-    other sylesheets into your bunde as well, e.j:
-    
-    import 'relative/path/to/stylesheet.scss';
-
-*/
+.list-group-item:hover .icono-oculto {
+    visibility: visible;
+}
