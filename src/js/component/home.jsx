@@ -24,6 +24,7 @@ const Home = () => {
 			if(resp.ok){
 				renderTasks();
 			}
+			setNuevaTarea("");
 		}
 	}
 
@@ -46,11 +47,10 @@ const Home = () => {
 			const datos = await fetch(urlUser)
 			if (datos.status == '404') {
 				createUser();
-				return null
+				return ""
 			}
 
 			const informacion = await datos.json();
-
 			setListaDeTareas(informacion.todos)
 
 		} catch (error) {
@@ -73,6 +73,20 @@ const Home = () => {
 		}
 	}
 
+	const deleteUser = async() =>{
+		try {
+			const deletedUser = await fetch(urlUser, {
+				method: 'DELETE',			
+			})		
+			if (deletedUser.ok) {
+				setListaDeTareas([]);
+				renderTasks();
+			}
+		} catch (error) {
+			console.error("Error al eliminar usuario")
+		}
+	}
+
 	useEffect(()=>{
 		renderTasks();
 	},[])
@@ -87,6 +101,7 @@ const Home = () => {
 						className="form-control"
 						placeholder="Qué necesitas hacer?"
 						value={nuevaTarea}
+						id="tarea"
 						onChange={(evento) => setNuevaTarea(evento.target.value)}
 						onKeyUp={(evento) => {
 							addNewTask(evento);
@@ -100,13 +115,20 @@ const Home = () => {
 							<i onClick={() => {
 
 								deleteTask(task.id)
-
 								/* const aux = listaDeTareas.filter((_task, ind) => ind !== index);
 								setListaDeTareas(aux); */
 							}} className="fa-solid fa-trash icono-oculto"></i>
 						</div>
 					))}
 				</div>
+				<div className="btn-group-vertical mt-3 d-flex w-50 mx-auto">
+					<button type="button" className="btn btn-secondary"
+						onClick={()=>{
+							deleteUser();
+						}}>
+						Borrar el usuario y las tareas</button>
+				</div>
+
 				<br />
 				<span>
 					{listaDeTareas.length === 0 ? "No hay tareas. Añade una nueva!" : `${listaDeTareas.length} items left`}
